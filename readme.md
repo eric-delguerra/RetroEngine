@@ -1,6 +1,6 @@
 # RetroEngine - Love2D Engine Framework ![MIT License](https://img.shields.io/badge/license-MIT-green) ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 
-**RetroEngine** est un framework personnalisé pour Love2D, conçu pour gérer des moteurs de jeux rétro, comme le Game Boy (GB). Il supporte une configuration dynamique via des fichiers spécifiques.
+**RetroEngine** est un framework personnalisé pour Love2D, conçu pour gérer des moteurs de jeux rétro, comme le Game Boy (GB). Il supporte une configuration dynamique.
 
 ## Table des Matières
 - [Fonctionnalités](#fonctionnalités)
@@ -108,11 +108,7 @@ Lors de la création d'une instance `RetroEngine`, vous pouvez configurer divers
    - `colors.primary` : Couleur principale utilisée pour le texte et les formes.
    - `backgroundColor` : Couleur d'arrière-plan de l'écran de jeu.
 
-3. **Gestion de l'écran de boot** :
-   - `OpeningScreenBegin()` : Affiche l'écran de démarrage avec un texte et une animation simple.
-   - `OpeningScreenEnd()` : Terminé l'affichage de l'écran de démarrage.
-
-4. **Affichage du logo** : Le moteur permet d'afficher un logo personnalisé lors du boot via l'image définie dans `RE.logo`.
+3. **Affichage du logo** : Le moteur permet d'afficher un logo personnalisé lors du boot via l'image définie dans `RE.logo`.
 
 ### Exemple de fichier de moteur (GB.lua)
 
