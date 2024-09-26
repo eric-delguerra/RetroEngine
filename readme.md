@@ -1,6 +1,14 @@
-# RetroEngine - Love2D Engine Framework
+# RetroEngine - Love2D Engine Framework ![MIT License](https://img.shields.io/badge/license-MIT-green) ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 
-**RetroEngine** est un framework personnalisé pour Love2D, conçu pour gérer des moteurs de jeux rétro. Il supporte plusieurs types d'engines (par exemple, GB) avec une configuration dynamique via des fichiers spécifiques.
+**RetroEngine** est un framework personnalisé pour Love2D, conçu pour gérer des moteurs de jeux rétro, comme le Game Boy (GB). Il supporte une configuration dynamique via des fichiers spécifiques.
+
+## Table des Matières
+- [Fonctionnalités](#fonctionnalités)
+- [Structure du projet](#structure-du-projet)
+- [Installation et Utilisation](#installation-et-utilisation)
+- [Documentation](#documentation)
+- [Contribution](#contribution)
+- [Licence](#licence)
 
 ## Fonctionnalités
 - **Animation de démarrage** : Logo et animation de démarrage personnalisables.
