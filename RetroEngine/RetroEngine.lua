@@ -31,6 +31,7 @@ Methods:
 - RetroEngine:setBackgroundColor(pBg): Sets the background color of the engine.
 - RetroEngine:getColors(colorName): Returns the color configuration based on the provided color name or all colors if no name is provided.
 - RetroEngine:GetCenterScreen(): Returns the center coordinates of the screen.
+- RetroEngine:GetScreenSize(): Returns the size of the screen.
 
 (c) Eric Del Guerra - MIT License
 ]]
@@ -196,6 +197,11 @@ end
 function RetroEngine:GetCenterScreen()
     return love.graphics.getWidth() * (self.mode.scale / 10),
         love.graphics.getHeight() * (self.mode.scale / 10)
+end
+
+function RetroEngine:GetScreenSize()
+    return love.graphics.getWidth() * self.mode.scale,
+        love.graphics.getHeight() * self.mode.scale
 end
 
 return RetroEngine

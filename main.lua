@@ -1,4 +1,5 @@
-local RE = require('RetroEngine/RetroEngine'):new('GB')
+-- You can use as a global variable to access all the functions and variables of the engine everywhere in your game.
+RE = require('RetroEngine/RetroEngine'):new('GB')
 
 function love.load()
     RE:load()
