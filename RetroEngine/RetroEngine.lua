@@ -30,6 +30,7 @@ Methods:
 - RetroEngine:hasBooted(): Returns whether the engine has completed the boot process.
 - RetroEngine:setBackgroundColor(pBg): Sets the background color of the engine.
 - RetroEngine:getColors(colorName): Returns the color configuration based on the provided color name or all colors if no name is provided.
+- RetroEngine:GetCenterScreen(): Returns the center coordinates of the screen.
 
 (c) Eric Del Guerra - MIT License
 ]]
@@ -91,7 +92,6 @@ function RetroEngine:init()
     love.graphics.setFont(self.font)
 end
 
-
 function RetroEngine:update(dt)
     if self.boot_animation_end then
         endind_timer = endind_timer + dt
@@ -112,7 +112,7 @@ function RetroEngine:draw()
     else
         if endind_timer < self.boot_end_timer then
             self:OpeningScreenEnd()
-        else 
+        else
             self.hasBoot = true
         end
     end
@@ -193,7 +193,9 @@ function RetroEngine:getColors(colorName)
     end
 end
 
-
-
+function RetroEngine:GetCenterScreen()
+    return love.graphics.getWidth() * (self.mode.scale / 10),
+        love.graphics.getHeight() * (self.mode.scale / 10)
+end
 
 return RetroEngine
