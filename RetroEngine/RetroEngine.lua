@@ -1,3 +1,38 @@
+--[[
+RetroEngine is a class that represents a retro game engine with boot animations and customizable configurations.
+
+Properties:
+- boot_animation_end (boolean): Indicates if the boot animation has ended.
+- hasBoot (boolean): Indicates if the boot process has completed.
+- boot_speed (number): Speed of the boot animation.
+- boot_end_timer (number): Duration of the boot end timer.
+- logo (Image): The logo image displayed during boot.
+- colors (table): Color configurations for the engine.
+- backgroundColor (table): Background color of the engine.
+- name (string): Name of the engine.
+- mode (table): Display mode configurations.
+- font_size (number): Font size used in the engine.
+- font_name (string): Font name used in the engine.
+- boot (table): Boot animation configurations.
+- font (Font): Font object used in the engine.
+- sound (Source): Sound object for the boot animation.
+
+Methods:
+- RetroEngine:new(pType, pConfig): Creates a new instance of RetroEngine.
+- RetroEngine:load(): Loads the engine and initializes the window and graphics settings.
+- RetroEngine:init(): Initializes the engine settings and prints loading information.
+- RetroEngine:update(dt): Updates the engine state, including the boot animation.
+- RetroEngine:draw(): Draws the engine graphics, including the boot animation and background.
+- RetroEngine:OpeningScreenBegin(): Draws the opening screen during the boot animation.
+- RetroEngine:OpeningScreenEnd(): Draws the ending screen of the boot animation.
+- RetroEngine:PrintName(): Prints the engine name and logo on the screen.
+- RetroEngine:resize(pNewScale): Resizes the engine display based on the new scale.
+- RetroEngine:hasBooted(): Returns whether the engine has completed the boot process.
+- RetroEngine:setBackgroundColor(pBg): Sets the background color of the engine.
+- RetroEngine:getColors(colorName): Returns the color configuration based on the provided color name or all colors if no name is provided.
+
+(c) Eric Del Guerra - MIT License
+]]
 local RetroEngine = {}
 RetroEngine.__index = RetroEngine
 
@@ -149,6 +184,16 @@ function RetroEngine:setBackgroundColor(pBg)
     love.graphics.setBackgroundColor(pBg or self.backgroundColor)
     love.graphics.setColor(self.colors.primary)
 end
+
+function RetroEngine:getColors(colorName)
+    if colorName then
+        return self.colors[colorName]
+    else
+        return self.colors
+    end
+end
+
+
 
 
 return RetroEngine
