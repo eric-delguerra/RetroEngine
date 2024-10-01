@@ -7,6 +7,8 @@ Properties:
 - boot_speed (number): Speed of the boot animation.
 - boot_end_timer (number): Duration of the boot end timer.
 - logo (Image): The logo image displayed during boot.
+
+Configuration Properties:
 - colors (table): Color configurations for the engine.
 - backgroundColor (table): Background color of the engine.
 - name (string): Name of the engine.
@@ -16,6 +18,9 @@ Properties:
 - boot (table): Boot animation configurations.
 - font (Font): Font object used in the engine.
 - sound (Source): Sound object for the boot animation.
+- draw_ceils (boolean): Indicates if the ceils grid should be drawn.
+- ceil_size (number): Size of each ceils in the grid.
+- ceil_color (table): Color of the ceils borders in the grid.
 
 Methods:
 - RetroEngine:new(pType, pConfig): Creates a new instance of RetroEngine.
@@ -26,12 +31,21 @@ Methods:
 - RetroEngine:OpeningScreenBegin(): Draws the opening screen during the boot animation.
 - RetroEngine:OpeningScreenEnd(): Draws the ending screen of the boot animation.
 - RetroEngine:PrintName(): Prints the engine name and logo on the screen.
-- RetroEngine:resize(pNewScale): Resizes the engine display based on the new scale.
-- RetroEngine:hasBooted(): Returns whether the engine has completed the boot process.
-- RetroEngine:setBackgroundColor(pBg): Sets the background color of the engine.
-- RetroEngine:getColors(colorName): Returns the color configuration based on the provided color name or all colors if no name is provided.
+
+--- UTILS FUNCTIONS ---
+- RetroEngine:Resize(pNewScale): Resizes the engine display based on the new scale.
+- RetroEngine:HasBooted(): Returns whether the engine has completed the boot process.
+- RetroEngine:SetBackgroundColor(pBg): Sets the background color of the engine.
+- RetroEngine:GetColors(colorName): Returns the color configuration based on the provided color name or all colors if no name is provided.
 - RetroEngine:GetCenterScreen(): Returns the center coordinates of the screen.
 - RetroEngine:GetScreenSize(): Returns the size of the screen.
+- RetroEngine:PrintText(pText, pX, pY): Prints text on the screen at the specified coordinates.
+
+-- CEILS FUNCTIONS --
+- RetroEngine:DrawCeils(): Draws the ceils grid on the screen.
+- RetroEngine:SetCeilConfig(pIsDrawing, pCeilSize, pColor): Sets the configuration for drawing the ceils grid.
+- RetroEngine:GetCeilsAxisNumbers(): Returns the number of ceils along the x and y axes based on the screen size.
+- RetroEngine:GetCeilPosition(pX, pY): Returns the position of the ceil based on the screen coordinates.
 
 (c) Eric Del Guerra - MIT License
 ]]
@@ -53,6 +67,7 @@ function RetroEngine:new(pType, pConfig)
     RE.boot_end_timer = DEFAULT_BOOT_END_TIMER
     RE.logo = love.graphics.newImage('RetroEngine/Images/logov2.png')
 
+
     -- Set all the properties of the engine
     local ENGINE = love.filesystem.load('RetroEngine/Engines/' .. pType .. '.lua')()
 
@@ -64,6 +79,10 @@ function RetroEngine:new(pType, pConfig)
     RE.font_name = ENGINE.font_name
     RE.boot = ENGINE.boot
 
+
+    RE.draw_ceils = false
+    RE.ceil_size = 8
+    RE.ceil_color = ENGINE.colors.primary
     if pConfig then
         for key, value in pairs(pConfig) do
             RE[key] = value
@@ -89,7 +108,7 @@ function RetroEngine:init()
         self.mode.height * self.mode.scale
     )
 
-    self:setBackgroundColor()
+    self:SetBackgroundColor()
     love.graphics.setFont(self.font)
 end
 
@@ -118,7 +137,11 @@ function RetroEngine:draw()
         end
     end
 
-    self:setBackgroundColor()
+    if self.draw_ceils and self.hasBoot then
+        self:DrawCeils()
+    end
+
+    self:SetBackgroundColor()
 end
 
 -- ----------------------------------------------------------
@@ -172,23 +195,27 @@ end
 -- --------------- UTILS FUNCTIONS --------------------------
 -- ----------------------------------------------------------
 
-function RetroEngine:resize(pNewScale)
+function RetroEngine:NewValue(pkey, pValue)
+    self[pkey] = pValue
+end
+
+function RetroEngine:Resize(pNewScale)
     self.mode.scale = pNewScale
     self:init()
 end
 
-function RetroEngine:hasBooted()
+function RetroEngine:HasBooted()
     return self.hasBoot
 end
 
-function RetroEngine:setBackgroundColor(pBg)
+function RetroEngine:SetBackgroundColor(pBg)
     love.graphics.setBackgroundColor(pBg or self.backgroundColor)
     love.graphics.setColor(self.colors.primary)
 end
 
-function RetroEngine:getColors(colorName)
-    if colorName then
-        return self.colors[colorName]
+function RetroEngine:GetColors(pColorName)
+    if pColorName then
+        return self.colors[pColorName]
     else
         return self.colors
     end
@@ -200,8 +227,51 @@ function RetroEngine:GetCenterScreen()
 end
 
 function RetroEngine:GetScreenSize()
-    return love.graphics.getWidth() * self.mode.scale,
-        love.graphics.getHeight() * self.mode.scale
+    return self.mode.width * self.mode.scale,
+        self.mode.height * self.mode.scale
+end
+
+function RetroEngine:PrintText(pText, pX, pY)
+    love.graphics.print(
+        pText,
+        pX,
+        pY,
+        0,
+        1,
+        1,
+        self.font:getWidth(pText) / 2,
+        self.font:getHeight() / 2
+    )
+end
+
+function RetroEngine:DrawCeils()
+    love.graphics.setColor(self.ceil_color)
+    for i = 0, self.mode.width * self.mode.scale, (self.ceil_size * self.mode.scale) do
+        for j = 0, self.mode.height * self.mode.scale, (self.ceil_size * self.mode.scale) do
+            love.graphics.rectangle(
+                'line',
+                i,
+                j,
+                (self.ceil_size * self.mode.scale),
+                (self.ceil_size * self.mode.scale)
+            )
+        end
+    end
+end
+
+function RetroEngine:SetCeilConfig(pIsDrawing, pCeilSize, pColor)
+    self.draw_ceils = pIsDrawing
+    self.ceil_size = pCeilSize
+    self.ceil_color = pColor
+end
+
+function RetroEngine:GetCeilsAxisNumbers()
+    return self.mode.height * self.mode.scale / self.ceil_size,
+        self.mode.width * self.mode.scale / self.ceil_size
+end
+
+function RetroEngine:GetCeilPosition(pX, pY)
+    return math.floor(pX / (self.ceil_size * self.mode.scale)), math.floor(pY / (self.ceil_size * self.mode.scale))
 end
 
 return RetroEngine
